@@ -66,7 +66,18 @@ rest of this guide happens.
 
 ## Step 3: Grant Termux storage permission
 
-Run this command in Termux:
+First, make sure your prompt shows `~ $` — a short prompt. If it shows
+something longer like `data/data/com.termux/files/home/downloads $`
+(because you tapped a downloaded file, or opened a link in Termux, or
+something similar), type `cd` and press Enter to return home.
+
+**If `termux-setup-storage` says "inaccessible" or "not found":** the
+most common reason is that the **Termux:API** app isn't installed. Open
+F-Droid, install **Termux:API**, return to Termux, run the command
+again. (Termux:API is a separate app that provides the
+`termux-setup-storage` command — Termux itself doesn't include it.)
+
+Once Termux:API is installed, run:
 
 ```sh
 termux-setup-storage
@@ -80,7 +91,6 @@ APKs.
 If the dialog doesn't appear, open **Android Settings → Apps → Termux →
 Permissions → Files and media** and toggle it on, then re-run the
 command.
-
 ## Step 4: Run the installer
 
 In the Termux command prompt, paste this one line and press Enter:

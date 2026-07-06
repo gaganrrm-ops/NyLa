@@ -26,15 +26,22 @@
 
 set -e
 
+# Run from $HOME so that any path-relative operations (termux-setup-storage
+# creates symlinks under $HOME/storage, the boot script lives under
+# $HOME/.termux/boot, etc.) land where they belong, regardless of where the
+# user pasted the one-liner from. Some Android keyboards and clipboard
+# pastes land the user in /sdcard/Download or similar, which silently
+# breaks things later. Normalize up front.
+cd "${HOME:-/data/data/com.termux/files/home}" 2>/dev/null || cd / || true
+
 REPO_URL="${NYLA_REPO_URL:-https://github.com/gaganrrm-ops/NyLa}"
 REPO_BRANCH="${NYLA_BRANCH:-main}"
-NyLa_PORT=7317
+NYLA_PORT=7317
 PREFIX=/data/data/com.termux/files/usr
 SVDIR=$PREFIX/var/service
 LOGDIR=$PREFIX/var/log
 BOOT_DIR=$PREFIX/home/.termux/boot
-NyLa_BIN=$PREFIX/bin/ny-la-start
-
+NYLA_BIN=$PREFIX/bin/ny-la-start
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -84,12 +91,15 @@ ok "Android API level: $API"
 # 4. Storage permission. Termux:API must be installed AND the user must
 #    have granted "All files access" (Android 11+) or "Storage" (Android
 #    6–10). There's no shell-side way to grant it; we have to ask.
+if ! command -v termux-setup-storage >/dev/null 2>&1; then
+	die "'termux-setup-storage' is not on your PATH. You need to install the Termux:API app from F-Droid (https://f-droid.org/packages/com.termux.api/), then open Termux once to register it. Re-run this script after that."
+fi
 if [ ! -d "$PREFIX/home/storage" ]; then
 	warn "Termux does not yet have storage permission."
 	warn "Running: termux-setup-storage  (this will pop a system dialog — accept it)"
 	warn "If the dialog doesn't appear, open Termux's Android settings and"
 	warn "  toggle Permissions → Files and media → Allow."
-	termux-setup-storage
+	termux-setup-storage || warn "termux-setup-storage exited non-zero. If no dialog appeared, grant the permission in Android Settings → Apps → Termux → Permissions → Files and media."
 	sleep 1
 fi
 if [ -d "$PREFIX/home/storage" ]; then
