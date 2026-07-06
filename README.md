@@ -1,4 +1,4 @@
-# NyLa on your phone
+# NyLa
 
 NyLa is a personal AI coding agent that runs on your Android phone. It
 plugs into a Claude subscription or an Ollama Cloud API key, keeps
