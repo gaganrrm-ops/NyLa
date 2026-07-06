@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The OMP web server is plain HTTP on loopback. Allow cleartext
+         only to 127.0.0.1 (and ::1 for IPv6 loopback). The default
+         android:usesCleartextTraffic setting in the manifest is false on
+         API 28+, so this file is the explicit override. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</resources>

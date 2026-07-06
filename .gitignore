@@ -1,0 +1,9 @@
+# Build artifacts
+apk/build/
+apk/out/
+apk/keystore/
+
+# Editor / OS
+.DS_Store
+*.swp
+*~
